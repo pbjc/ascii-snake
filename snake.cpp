@@ -1,6 +1,12 @@
 #include "snake.h"
 #include <iostream>
 
+Snake::Snake() {
+  head_ = new Node{0, 0, nullptr};
+  length_ = 1;
+  dir_ = direction::RIGHT;
+}
+
 Snake::Snake(int startX, int startY) {
   head_ = new Node{startX, startY, nullptr};
   length_ = 1;

@@ -7,6 +7,7 @@ enum class direction { UP, DOWN, LEFT, RIGHT };
 
 class Snake {
   public:
+    Snake();
     Snake(int startX, int startY);
     Snake(int startX, int startY, direction dir, int len);
     ~Snake();
