@@ -35,9 +35,6 @@ class Snake {
     Node* iter_;
 
     void move(Node* node);
-
-    Snake(const Snake& snake);
-    Snake& operator=(const Snake& snake) { return *this; }
 };
 
 #endif
