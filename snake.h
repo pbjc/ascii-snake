@@ -10,20 +10,31 @@ class Snake {
     Snake(int startX, int startY);
     Snake(int startX, int startY, direction dir, int len);
     ~Snake();
+
     void setDir(direction dir);
     void move();
     void feed();
+
+    struct Location {int x; int y;};
+    void resetIterator();
+    bool hasNextLoc();
+    Location nextLoc();
+
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake);
   private:
     struct Node {
       int x;
       int y;
-      struct Node* next;
+      Node* next;
     };
+
     Node* head_;
     int length_;
     direction dir_;
+    Node* iter_;
+
     void move(Node* node);
+
     Snake(const Snake& snake);
     Snake& operator=(const Snake& snake) { return *this; }
 };

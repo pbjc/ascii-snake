@@ -14,6 +14,9 @@ Snake::Snake(int startX, int startY, direction dir, int len) {
                   dir == direction::RIGHT ? -1 : 0;
   int buildDirY = dir == direction::DOWN ? -1 :
                   dir == direction::UP ? 1 : 0;
+  if (len < 1) {
+    len = 1;
+  }
   for (int i = 1; i < len; i++) {
     int nextX = startX + i * buildDirX;
     int nextY = startY + i * buildDirY;
@@ -60,6 +63,20 @@ void Snake::feed() {
   int newY = head_->y + (dir_ == direction::DOWN ? 1:
                          dir_ == direction::UP ? -1 : 0);
   head_ = new Node{newX, newY, head_};
+}
+
+void Snake::resetIterator() {
+  iter_ = head_;
+}
+
+bool Snake::hasNextLoc() {
+  return iter_ != nullptr;
+}
+
+Snake::Location Snake::nextLoc() {
+  Location loc = {iter_->x, iter_->y};
+  iter_ = iter_->next;
+  return loc;
 }
 
 std::ostream& operator<<(std::ostream& os, const Snake& snake) {
