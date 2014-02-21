@@ -2,12 +2,13 @@
 #include <iostream>
 
 Snake::Snake(int startX, int startY) {
-  head_ = new Node{startX, startY, direction::LEFT, nullptr};
+  head_ = new Node{startX, startY, nullptr};
   length_ = 1;
+  dir_ = direction::LEFT;
 }
 
 Snake::Snake(int startX, int startY, direction dir, int len) {
-  head_ = new Node{startX, startY, dir, nullptr};
+  head_ = new Node{startX, startY, nullptr};
   Node* curr = head_;
   int buildDirX = dir == direction::LEFT ? 1 :
                   dir == direction::RIGHT ? -1 : 0;
@@ -16,10 +17,11 @@ Snake::Snake(int startX, int startY, direction dir, int len) {
   for (int i = 1; i < len; i++) {
     int nextX = startX + i * buildDirX;
     int nextY = startY + i * buildDirY;
-    curr->next = new Node{nextX, nextY, dir, nullptr};
+    curr->next = new Node{nextX, nextY, nullptr};
     curr = curr->next;
   }
   length_ = len;
+  dir_ = dir;
 }
 
 Snake::~Snake() {
@@ -32,15 +34,15 @@ Snake::~Snake() {
 }
 
 void Snake::setDir(direction dir) {
-  head_->dir = dir;
+  dir_ = dir;
 }
 
 void Snake::move() {
   move(head_);
-  head_->x += head_->dir == direction::LEFT ? -1 :
-              head_->dir == direction::RIGHT ? 1 : 0;
-  head_->y += head_->dir == direction::DOWN ? -1 :
-              head_->dir == direction::UP ? 1 : 0;
+  head_->x += dir_ == direction::LEFT ? -1 :
+              dir_ == direction::RIGHT ? 1 : 0;
+  head_->y += dir_ == direction::DOWN ? -1 :
+              dir_ == direction::UP ? 1 : 0;
 }
 
 void Snake::move(Node* node) {
@@ -50,7 +52,6 @@ void Snake::move(Node* node) {
   move(node->next);
   node->next->x = node->x;
   node->next->y = node->y;
-  node->next->dir = node->dir;
 }
 
 void Snake::move(direction dir) {
@@ -59,17 +60,18 @@ void Snake::move(direction dir) {
 }
 
 void Snake::feed() {
-  int newX = head_->x + (head_->dir == direction::LEFT ? -1 :
-                        head_->dir == direction::RIGHT ? 1 : 0);
-  int newY = head_->y + (head_->dir == direction::DOWN ? -1:
-                        head_->dir == direction::UP ? 1 : 0);
-  head_ = new Node{newX, newY, head_->dir, head_};
+  int newX = head_->x + (dir_ == direction::LEFT ? -1 :
+                         dir_ == direction::RIGHT ? 1 : 0);
+  int newY = head_->y + (dir_ == direction::DOWN ? -1:
+                         dir_ == direction::UP ? 1 : 0);
+  head_ = new Node{newX, newY, head_};
 }
 
 std::ostream& operator<<(std::ostream& os, const Snake& snake) {
+  os << int(snake.dir_) << ":";
   Snake::Node* curr = snake.head_;
   while (curr != nullptr) {
-    os << "[" << curr->x << ", " << curr->y << "]" << ":" << int(curr->dir);
+    os << "[" << curr->x << ", " << curr->y << "]";
     if (curr->next != nullptr) {
       os << ", ";
     }

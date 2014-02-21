@@ -3,9 +3,10 @@
 
 #include <iostream>
 
+enum class direction { UP, DOWN, LEFT, RIGHT };
+
 class Snake {
   public:
-    enum class direction { UP, DOWN, LEFT, RIGHT };
     Snake(int startX, int startY);
     Snake(int startX, int startY, direction dir, int len);
     ~Snake();
@@ -18,11 +19,11 @@ class Snake {
     struct Node {
       int x;
       int y;
-      direction dir;
       struct Node* next;
     };
     Node* head_;
     int length_;
+    direction dir_;
     void move(Node* node);
     Snake(const Snake& snake) { }
     Snake& operator=(const Snake& snake) { return *this; }
