@@ -2,14 +2,14 @@
 #define ASCII_SNAKE_SNAKE_H_
 
 #include <iostream>
-
-enum class direction { UP, DOWN, LEFT, RIGHT };
+#include "common.h"
 
 class Snake {
   public:
     Snake();
     Snake(int startX, int startY);
     Snake(int startX, int startY, direction dir, int len);
+    Snake(const Snake& snake) = delete;
     ~Snake();
 
     void setDir(direction dir);

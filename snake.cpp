@@ -84,7 +84,7 @@ Snake::Location Snake::nextLoc() {
   iter_ = iter_->next;
   return loc;
 }
-
+  
 std::ostream& operator<<(std::ostream& os, const Snake& snake) {
   os << int(snake.dir_) << ":";
   Snake::Node* curr = snake.head_;
