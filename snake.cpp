@@ -12,8 +12,8 @@ Snake::Snake(int startX, int startY, direction dir, int len) {
   Node* curr = head_;
   int buildDirX = dir == direction::LEFT ? 1 :
                   dir == direction::RIGHT ? -1 : 0;
-  int buildDirY = dir == direction::DOWN ? 1 :
-                  dir == direction::UP ? -1 : 0;
+  int buildDirY = dir == direction::DOWN ? -1 :
+                  dir == direction::UP ? 1 : 0;
   for (int i = 1; i < len; i++) {
     int nextX = startX + i * buildDirX;
     int nextY = startY + i * buildDirY;
@@ -41,8 +41,8 @@ void Snake::move() {
   move(head_);
   head_->x += dir_ == direction::LEFT ? -1 :
               dir_ == direction::RIGHT ? 1 : 0;
-  head_->y += dir_ == direction::DOWN ? -1 :
-              dir_ == direction::UP ? 1 : 0;
+  head_->y += dir_ == direction::DOWN ? 1 :
+              dir_ == direction::UP ? -1 : 0;
 }
 
 void Snake::move(Node* node) {
@@ -62,8 +62,8 @@ void Snake::move(direction dir) {
 void Snake::feed() {
   int newX = head_->x + (dir_ == direction::LEFT ? -1 :
                          dir_ == direction::RIGHT ? 1 : 0);
-  int newY = head_->y + (dir_ == direction::DOWN ? -1:
-                         dir_ == direction::UP ? 1 : 0);
+  int newY = head_->y + (dir_ == direction::DOWN ? 1:
+                         dir_ == direction::UP ? -1 : 0);
   head_ = new Node{newX, newY, head_};
 }
 

@@ -25,7 +25,7 @@ class Snake {
     int length_;
     direction dir_;
     void move(Node* node);
-    Snake(const Snake& snake) { }
+    Snake(const Snake& snake);
     Snake& operator=(const Snake& snake) { return *this; }
 };
 
