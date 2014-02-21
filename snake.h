@@ -12,7 +12,6 @@ class Snake {
     ~Snake();
     void setDir(direction dir);
     void move();
-    void move(direction dir);
     void feed();
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake);
   private:

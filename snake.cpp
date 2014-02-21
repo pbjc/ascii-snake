@@ -54,11 +54,6 @@ void Snake::move(Node* node) {
   node->next->y = node->y;
 }
 
-void Snake::move(direction dir) {
-  setDir(dir);
-  move();
-}
-
 void Snake::feed() {
   int newX = head_->x + (dir_ == direction::LEFT ? -1 :
                          dir_ == direction::RIGHT ? 1 : 0);
