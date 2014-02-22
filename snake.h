@@ -24,12 +24,13 @@ class Snake {
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake);
   private:
     struct Node : public Location {
-      Node(Location loc, Node* nextNode) : Location(loc.x, loc.y), next(nextNode) { }
       Node* next;
+      Node(Location loc, Node* nextNode) : Location(loc.x, loc.y), next(nextNode) { }
     };
 
     Node* head_;
     Node* iter_;
+    Location lastTailLoc;
     int length_;
     direction dir_;
 

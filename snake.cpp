@@ -7,12 +7,14 @@ Snake::Snake() {
   head_ = new Node{{0, 0}, nullptr};
   length_ = 1;
   dir_ = direction::RIGHT;
+  lastTailLoc = {0, 0};
 }
 
 Snake::Snake(Location startLoc) {
   head_ = new Node{startLoc, nullptr};
   length_ = 1;
   dir_ = direction::LEFT;
+  lastTailLoc = {startLoc.x, startLoc.y};
 }
 
 Snake::Snake(Location startLoc, direction dir, int len) {
@@ -31,6 +33,9 @@ Snake::Snake(Location startLoc, direction dir, int len) {
     int nextY = startLoc.y + i * buildDirY;
     curr->next = new Node{{nextX, nextY}, nullptr};
     curr = curr->next;
+    if (i == len - 1) {
+      lastTailLoc = {curr->x + buildDirX, curr->y + buildDirY};
+    }
   }
   length_ = len;
   dir_ = dir;
@@ -59,6 +64,7 @@ void Snake::move() {
 
 void Snake::move(Node* node) {
   if (node->next == nullptr) {
+    lastTailLoc = {node->x, node->y};
     return;
   }
   move(node->next);
@@ -67,11 +73,11 @@ void Snake::move(Node* node) {
 }
 
 void Snake::feed() {
-  int newX = head_->x + (dir_ == direction::LEFT ? -1 :
-                         dir_ == direction::RIGHT ? 1 : 0);
-  int newY = head_->y + (dir_ == direction::DOWN ? 1:
-                         dir_ == direction::UP ? -1 : 0);
-  head_ = new Node{{newX, newY}, head_};
+  Node* curr = head_;
+  while (curr->next != nullptr) {
+    curr = curr->next;
+  }
+  curr->next = new Node{lastTailLoc, nullptr};
 }
 
 void Snake::resetIterator() {
@@ -92,7 +98,7 @@ std::ostream& operator<<(std::ostream& os, const Snake& snake) {
   os << int(snake.dir_) << ":";
   Snake::Node* curr = snake.head_;
   while (curr != nullptr) {
-    os << "[" << curr->x << ", " << curr->y << "]";
+    os << *curr;
     if (curr->next != nullptr) {
       os << ", ";
     }
