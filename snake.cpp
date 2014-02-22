@@ -8,14 +8,14 @@ Snake::Snake() {
   dir_ = direction::RIGHT;
 }
 
-Snake::Snake(int startX, int startY) {
-  head_ = new Node{startX, startY, nullptr};
+Snake::Snake(Location startLoc) {
+  head_ = new Node{startLoc.x, startLoc.y, nullptr};
   length_ = 1;
   dir_ = direction::LEFT;
 }
 
-Snake::Snake(int startX, int startY, direction dir, int len) {
-  head_ = new Node{startX, startY, nullptr};
+Snake::Snake(Location startLoc, direction dir, int len) {
+  head_ = new Node{startLoc.x, startLoc.y, nullptr};
   Node* curr = head_;
   int buildDirX = dir == direction::LEFT ? 1 :
                   dir == direction::RIGHT ? -1 : 0;
@@ -25,8 +25,8 @@ Snake::Snake(int startX, int startY, direction dir, int len) {
     len = 1;
   }
   for (int i = 1; i < len; i++) {
-    int nextX = startX + i * buildDirX;
-    int nextY = startY + i * buildDirY;
+    int nextX = startLoc.x + i * buildDirX;
+    int nextY = startLoc.y + i * buildDirY;
     curr->next = new Node{nextX, nextY, nullptr};
     curr = curr->next;
   }

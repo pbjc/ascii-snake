@@ -7,8 +7,8 @@
 class Snake {
   public:
     Snake();
-    Snake(int startX, int startY);
-    Snake(int startX, int startY, direction dir, int len);
+    Snake(Location startLoc);
+    Snake(Location startLoc, direction dir, int len);
     Snake(const Snake&) = delete;
     Snake& operator=(const Snake&) = delete;
     ~Snake();
@@ -30,9 +30,9 @@ class Snake {
     };
 
     Node* head_;
+    Node* iter_;
     int length_;
     direction dir_;
-    Node* iter_;
 
     void move(Node* node);
 };

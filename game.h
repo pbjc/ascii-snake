@@ -13,13 +13,13 @@ class Game {
     Game& operator=(const Game&) = delete;
     ~Game();
 
-    void newGame(int startX, int startY);
-    void newGame(int startX, int startY, direction dir, int len);
+    void newGame(Location startLoc);
+    void newGame(Location startLoc, direction dir, int len);
 
     bool isActive();
     void setDir(direction dir);
     void update();
-    boardValue getValueAt(int x, int y) const;
+    boardValue getValueAt(Location loc) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Game& game);
   private:
@@ -29,7 +29,7 @@ class Game {
     Snake* snake_;
     bool gameRunning_;
 
-    boardValue& accessBoard(int x, int y);
+    boardValue& accessBoard(Location loc);
     void clearBoard();
     void drawBoard();
 };
