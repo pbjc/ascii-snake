@@ -9,7 +9,8 @@ class Snake {
     Snake();
     Snake(int startX, int startY);
     Snake(int startX, int startY, direction dir, int len);
-    Snake(const Snake& snake) = delete;
+    Snake(const Snake&) = delete;
+    Snake& operator=(const Snake&) = delete;
     ~Snake();
 
     void setDir(direction dir);

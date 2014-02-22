@@ -9,6 +9,8 @@ class Snake;
 class Game {
   public:
     Game(int boardWidth, int boardHeight);
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
     ~Game();
 
     void newGame(int startX, int startY);
