@@ -50,8 +50,7 @@ void Game::update() {
 
 boardValue Game::getValueAt(Location loc) const {
   if (loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_) {
-    std::cerr << "Error: Location out of bounds. [" << loc.x << ", " 
-                                                    << loc.y << "] ";
+    std::cerr << "Error: Location out of bounds. " << loc;
     std::cerr << "is not within the " << width_ << "x" << height_ 
                                       << " board dimensions.";
     std::cerr << std::endl;
@@ -77,8 +76,7 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
 
 boardValue& Game::accessBoard(Location loc) {
   if (loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_) {
-    std::cerr << "Error: Location out of bounds. [" << loc.x << ", " 
-                                                    << loc.y << "] ";
+    std::cerr << "Error: Location out of bounds. " << loc;
     std::cerr << "is not within the " << width_ << "x" << height_ 
                                       << " board dimensions.";
     std::cerr << std::endl;
