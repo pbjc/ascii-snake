@@ -12,6 +12,7 @@ Game::Game(int boardWidth, int boardHeight) {
 
 Game::~Game() {
   delete [] board_;
+  delete snake_;
 }
 
 void Game::newGame(Location startLoc) {
@@ -28,7 +29,7 @@ void Game::newGame(Location startLoc, direction dir, int len) {
   gameRunning_ = true;
 }
 
-bool Game::isActive() {
+bool Game::isActive() const {
   return gameRunning_;
 }
 

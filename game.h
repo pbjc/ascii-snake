@@ -16,7 +16,7 @@ class Game {
     void newGame(Location startLoc);
     void newGame(Location startLoc, direction dir, int len);
 
-    bool isActive();
+    bool isActive() const;
     void setDir(direction dir);
     void update();
     boardValue getValueAt(Location loc) const;
