@@ -17,7 +17,6 @@ class Snake {
     void move();
     void feed();
 
-    struct Location {int x; int y;};
     void resetIterator();
     bool hasNextLoc();
     Location nextLoc();

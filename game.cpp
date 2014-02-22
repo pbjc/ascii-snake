@@ -83,7 +83,7 @@ void Game::clearBoard() {
 void Game::drawBoard() {
   snake_->resetIterator();
   while (snake_->hasNextLoc()) {
-    Snake::Location loc = snake_->nextLoc();
+    Location loc = snake_->nextLoc();
     accessBoard(loc.x, loc.y) = boardValue::SNAKE;
   }
 }

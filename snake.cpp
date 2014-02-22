@@ -1,5 +1,6 @@
 #include "snake.h"
 #include <iostream>
+#include "common.h"
 
 Snake::Snake() {
   head_ = new Node{0, 0, nullptr};
@@ -79,7 +80,7 @@ bool Snake::hasNextLoc() {
   return iter_ != nullptr;
 }
 
-Snake::Location Snake::nextLoc() {
+Location Snake::nextLoc() {
   Location loc = {iter_->x, iter_->y};
   iter_ = iter_->next;
   return loc;
