@@ -4,13 +4,13 @@
 #include "common.h"
 
 Snake::Snake() {
-  head_ = new Node{0, 0, nullptr};
+  head_ = new Node{{0, 0}, nullptr};
   length_ = 1;
   dir_ = direction::RIGHT;
 }
 
 Snake::Snake(Location startLoc) {
-  head_ = new Node{startLoc.x, startLoc.y, nullptr};
+  head_ = new Node{startLoc, nullptr};
   length_ = 1;
   dir_ = direction::LEFT;
 }
@@ -20,7 +20,7 @@ Snake::Snake(Location startLoc, direction dir, int len) {
     std::cerr << "Error: Snake length must be greater than zero." << std::endl;
     exit(EXIT_FAILURE);
   }
-  head_ = new Node{startLoc.x, startLoc.y, nullptr};
+  head_ = new Node{startLoc, nullptr};
   Node* curr = head_;
   int buildDirX = dir == direction::LEFT ? 1 :
                   dir == direction::RIGHT ? -1 : 0;
@@ -29,7 +29,7 @@ Snake::Snake(Location startLoc, direction dir, int len) {
   for (int i = 1; i < len; i++) {
     int nextX = startLoc.x + i * buildDirX;
     int nextY = startLoc.y + i * buildDirY;
-    curr->next = new Node{nextX, nextY, nullptr};
+    curr->next = new Node{{nextX, nextY}, nullptr};
     curr = curr->next;
   }
   length_ = len;
@@ -71,7 +71,7 @@ void Snake::feed() {
                          dir_ == direction::RIGHT ? 1 : 0);
   int newY = head_->y + (dir_ == direction::DOWN ? 1:
                          dir_ == direction::UP ? -1 : 0);
-  head_ = new Node{newX, newY, head_};
+  head_ = new Node{{newX, newY}, head_};
 }
 
 void Snake::resetIterator() {
