@@ -1,4 +1,5 @@
 #include "snake.h"
+#include <cstdlib>
 #include <iostream>
 #include "common.h"
 
@@ -15,15 +16,16 @@ Snake::Snake(Location startLoc) {
 }
 
 Snake::Snake(Location startLoc, direction dir, int len) {
+  if (len < 1) {
+    std::cerr << "Error: Snake length must be greater than zero." << std::endl;
+    exit(EXIT_FAILURE);
+  }
   head_ = new Node{startLoc.x, startLoc.y, nullptr};
   Node* curr = head_;
   int buildDirX = dir == direction::LEFT ? 1 :
                   dir == direction::RIGHT ? -1 : 0;
   int buildDirY = dir == direction::DOWN ? -1 :
                   dir == direction::UP ? 1 : 0;
-  if (len < 1) {
-    len = 1;
-  }
   for (int i = 1; i < len; i++) {
     int nextX = startLoc.x + i * buildDirX;
     int nextY = startLoc.y + i * buildDirY;

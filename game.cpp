@@ -5,6 +5,10 @@
 #include "snake.h"
 
 Game::Game(int boardWidth, int boardHeight) {
+  if (boardWidth < 3 || boardHeight < 3) {
+    std::cerr << "Error: Board dimensions must be larger than 3x3." << std::endl;
+    exit(EXIT_FAILURE);
+  }
   width_ = boardWidth;
   height_ = boardHeight;
   board_  = new boardValue[width_ * height_];
@@ -45,6 +49,14 @@ void Game::update() {
 }
 
 boardValue Game::getValueAt(Location loc) const {
+  if (loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_) {
+    std::cerr << "Error: Location out of bounds. [" << loc.x << ", " 
+                                                    << loc.y << "] ";
+    std::cerr << "is not within the " << width_ << "x" << height_ 
+                                      << " board dimensions.";
+    std::cerr << std::endl;
+    exit(EXIT_FAILURE);
+  }
   return board_[loc.y * width_ + loc.x];
 }
 
@@ -68,7 +80,7 @@ boardValue& Game::accessBoard(Location loc) {
     std::cerr << "Error: Location out of bounds. [" << loc.x << ", " << loc.y << "] ";
     std::cerr << "is not within the " << width_ << "x" << height_ << " board.";
     std::cerr << std::endl;
-    exit(-1);
+    exit(EXIT_FAILURE);
   }
   return board_[loc.y * width_ + loc.x];
 }
