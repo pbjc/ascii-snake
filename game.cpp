@@ -1,12 +1,13 @@
 #include "game.h"
-#include "snake.h"
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
+#include "common.h"
+#include "snake.h"
 
 Game::Game(int boardWidth, int boardHeight) {
   width_ = boardWidth;
   height_ = boardHeight;
-  board_  = new char[width_ * height_];
+  board_  = new boardValue[width_ * height_];
 }
 
 Game::~Game() {
@@ -42,8 +43,8 @@ void Game::update() {
   drawBoard();
 }
 
-const char* Game::getBoard() {
-  return board_;
+boardValue Game::getValueAt(int x, int y) const {
+  return board_[y * width_ + x];
 }
 
 std::ostream& operator<<(std::ostream& os, const Game& game) {
@@ -51,7 +52,7 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
   for (int c = 0; c < game.width_; c++) {
     cout << "[";
     for (int r = 0; r < game.height_; r++) {
-      cout << int(game.accessBoard(r, c));
+      cout << int(game.getValueAt(r, c));
       if (r < game.height_ - 1) {
         cout << ", ";
       }
@@ -61,17 +62,7 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
   return os;
 }
 
-char Game::accessBoard(int x, int y) const {
-  if (x < 0 || x > width_ || y < 0 || y > height_) {
-    std::cerr << "Error: Location out of bounds. [" << x << ", " << y << "] ";
-    std::cerr << "is not within the " << width_ << "x" << height_ << " board.";
-    std::cerr << std::endl;
-    exit(-1);
-  }
-  return board_[y * width_ + x];
-}
-
-char& Game::accessBoard(int x, int y) {
+boardValue& Game::accessBoard(int x, int y) {
   if (x < 0 || x > width_ || y < 0 || y > height_) {
     std::cerr << "Error: Location out of bounds. [" << x << ", " << y << "] ";
     std::cerr << "is not within the " << width_ << "x" << height_ << " board.";
@@ -84,7 +75,7 @@ char& Game::accessBoard(int x, int y) {
 void Game::clearBoard() {
   for (int x = 0; x < width_; x++) {
     for (int y = 0; y < width_; y++) {
-      accessBoard(x, y) = 0;
+      accessBoard(x, y) = boardValue::EMPTY;
     }
   }
 }
@@ -93,6 +84,6 @@ void Game::drawBoard() {
   snake_->resetIterator();
   while (snake_->hasNextLoc()) {
     Snake::Location loc = snake_->nextLoc();
-    accessBoard(loc.x, loc.y) = 1;
+    accessBoard(loc.x, loc.y) = boardValue::SNAKE;
   }
 }
