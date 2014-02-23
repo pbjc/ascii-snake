@@ -14,16 +14,20 @@ class Game {
     void newGame(Location startLocation);
     void newGame(Location startLocation, direction dir, int len);
 
-    bool isActive() const;
     void setDirection(direction dir);
     void update();
+
+    bool isActive() const;
     board_value getValueAt(Location loc) const;
+    int getSnakeLength() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Game& game);
   private:
     board_value& accessBoard(Location loc);
     void clearBoard();
-    void drawBoard();
+    void updateAndDrawSnake();
+    void undrawSnake();
+    void placeNewFood();
 
     int width_;
     int height_;

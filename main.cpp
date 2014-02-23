@@ -8,7 +8,7 @@ int main() {
   std::cout << game << std::endl;
   game.update();
   std::cout << game << std::endl;
-  game.setDir(direction::UP);
+  game.setDirection(direction::UP);
   game.update();
   std::cout << game;
 }

@@ -14,6 +14,7 @@ class Snake {
     void setDirection(direction dir);
     void move();
     void feed();
+    int getLength() const;
 
     void resetIterator();
     bool hasNextLoc();

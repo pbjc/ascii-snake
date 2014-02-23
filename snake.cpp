@@ -80,6 +80,10 @@ void Snake::feed() {
   curr->next = new Node{lastTailLoc, nullptr};
 }
 
+int Snake::getLength() const {
+  return length_;
+}
+
 void Snake::resetIterator() {
   iter_ = head_;
 }

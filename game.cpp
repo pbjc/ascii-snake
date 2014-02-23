@@ -1,5 +1,6 @@
 #include "game.h"
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include "common.h"
 #include "snake.h"
@@ -12,6 +13,7 @@ Game::Game(int boardWidth, int boardHeight) {
   width_ = boardWidth;
   height_ = boardHeight;
   board_  = new board_value[width_ * height_];
+  srand(time(NULL));
 }
 
 Game::~Game() {
@@ -22,14 +24,16 @@ Game::~Game() {
 void Game::newGame(Location startLocation) {
   clearBoard();
   snake_ = new Snake(startLocation);
-  drawBoard();
+  placeNewFood();
+  updateAndDrawSnake();
   gameRunning_ = true;
 }
 
 void Game::newGame(Location startLocation, direction dir, int len) {
   clearBoard();
   snake_ = new Snake(startLocation, dir, len);
-  drawBoard();
+  placeNewFood();
+  updateAndDrawSnake();
   gameRunning_ = true;
 }
 
@@ -42,10 +46,12 @@ void Game::setDirection(direction dir) {
 }
 
 void Game::update() {
+  if (!gameRunning_) {
+    return;
+  }
+  undrawSnake();
   snake_->move();
-  // do stuff
-  clearBoard();
-  drawBoard();
+  updateAndDrawSnake();
 }
 
 board_value Game::getValueAt(Location loc) const {
@@ -57,6 +63,10 @@ board_value Game::getValueAt(Location loc) const {
     exit(EXIT_FAILURE);
   }
   return board_[loc.y * width_ + loc.x];
+}
+
+int Snake::getSnakeLength() const {
+  return snake_->getLength();
 }
 
 std::ostream& operator<<(std::ostream& os, const Game& game) {
@@ -93,9 +103,40 @@ void Game::clearBoard() {
   }
 }
 
-void Game::drawBoard() {
+void Game::updateAndDrawSnake() {
   snake_->resetIterator();
+  Location headLoc = snake_->nextLoc();
+  if (accessBoard(headLoc) == board_value::SNAKE) {
+    gameRunning_ = false;
+    return;
+  } else if (accessBoard(headLoc) == board_value::FOOD) {
+    snake_->feed();
+    placeNewFood();
+  }
+  accessBoard(headLoc) = board_value::SNAKE;
   while (snake_->hasNextLoc()) {
     accessBoard(snake_->nextLoc()) = board_value::SNAKE;
+  }
+}
+
+void Game::undrawSnake() {
+  snake_->resetIterator();
+  while (snake_->hasNextLoc()) {
+    accessBoard(snake_->nextLoc()) = board_value::EMPTY;
+  }
+}
+
+void Game::placeNewFood() {
+  int randIndex = rand() % (width_ * height_ - snake_->getLength());
+  int counter = 0;
+  for (int i = 0; i < width_ * height_; i++) {
+    if (counter == randIndex) {
+      board_[i] = board_value::FOOD;
+      break;
+    } else {
+      if (board_[i] == board_value::EMPTY) {
+        counter++;
+      }
+    }
   }
 }
