@@ -24,6 +24,7 @@ class Game {
     friend std::ostream& operator<<(std::ostream& os, const Game& game);
   private:
     board_value& accessBoard(Location loc);
+    bool isOutOfBounds(Location loc) const;
     void clearBoard();
     void updateAndDrawSnake();
     void undrawSnake();

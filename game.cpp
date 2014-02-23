@@ -55,7 +55,7 @@ void Game::update() {
 }
 
 board_value Game::getValueAt(Location loc) const {
-  if (loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_) {
+  if (isOutOfBounds(loc)) {
     std::cerr << "Error: Location out of bounds. " << loc;
     std::cerr << "is not within the " << width_ << "x" << height_ 
                                       << " board dimensions.";
@@ -65,7 +65,7 @@ board_value Game::getValueAt(Location loc) const {
   return board_[loc.y * width_ + loc.x];
 }
 
-int Snake::getSnakeLength() const {
+int Game::getSnakeLength() const {
   return snake_->getLength();
 }
 
@@ -84,8 +84,12 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
   return os;
 }
 
+bool Game::isOutOfBounds(Location loc) const {
+  return loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_;
+}
+
 board_value& Game::accessBoard(Location loc) {
-  if (loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_) {
+  if (isOutOfBounds(loc)) {
     std::cerr << "Error: Location out of bounds. " << loc;
     std::cerr << "is not within the " << width_ << "x" << height_ 
                                       << " board dimensions.";
@@ -106,7 +110,7 @@ void Game::clearBoard() {
 void Game::updateAndDrawSnake() {
   snake_->resetIterator();
   Location headLoc = snake_->nextLoc();
-  if (accessBoard(headLoc) == board_value::SNAKE) {
+  if (accessBoard(headLoc) == board_value::SNAKE || isOutOfBounds(headLoc)) {
     gameRunning_ = false;
     return;
   } else if (accessBoard(headLoc) == board_value::FOOD) {
