@@ -9,8 +9,6 @@ class Snake;
 class Game {
   public:
     Game(int boardWidth, int boardHeight);
-    Game(const Game&) = delete;
-    Game& operator=(const Game&) = delete;
     ~Game();
 
     void newGame(Location startLoc);
@@ -32,6 +30,9 @@ class Game {
     board_value& accessBoard(Location loc);
     void clearBoard();
     void drawBoard();
+
+    Game(const Game&);
+    Game& operator=(const Game&);
 };
 
 #endif

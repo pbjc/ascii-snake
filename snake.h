@@ -9,8 +9,6 @@ class Snake {
     Snake();
     Snake(Location startLoc);
     Snake(Location startLoc, direction dir, int len);
-    Snake(const Snake&) = delete;
-    Snake& operator=(const Snake&) = delete;
     ~Snake();
 
     void setDir(direction dir);
@@ -35,6 +33,8 @@ class Snake {
     direction dir_;
 
     void move(Node* node);
+    Snake(const Snake&);
+    Snake& operator=(const Snake&);
 };
 
 #endif
