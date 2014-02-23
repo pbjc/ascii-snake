@@ -110,10 +110,10 @@ void Game::clearBoard() {
 void Game::updateAndDrawSnake() {
   snake_->resetIterator();
   Location headLoc = snake_->nextLoc();
-  if (accessBoard(headLoc) == board_value::SNAKE || isOutOfBounds(headLoc)) {
+  if (getValueAt(headLoc) == board_value::SNAKE || isOutOfBounds(headLoc)) {
     gameRunning_ = false;
     return;
-  } else if (accessBoard(headLoc) == board_value::FOOD) {
+  } else if (getValueAt(headLoc) == board_value::FOOD) {
     snake_->feed();
     placeNewFood();
   }
