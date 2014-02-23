@@ -19,17 +19,17 @@ class Game {
     bool isActive() const;
     void setDir(direction dir);
     void update();
-    boardValue getValueAt(Location loc) const;
+    board_value getValueAt(Location loc) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Game& game);
   private:
     int width_;
     int height_;
-    boardValue* board_;
+    board_value* board_;
     Snake* snake_;
     bool gameRunning_;
 
-    boardValue& accessBoard(Location loc);
+    board_value& accessBoard(Location loc);
     void clearBoard();
     void drawBoard();
 };

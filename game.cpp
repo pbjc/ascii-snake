@@ -11,7 +11,7 @@ Game::Game(int boardWidth, int boardHeight) {
   }
   width_ = boardWidth;
   height_ = boardHeight;
-  board_  = new boardValue[width_ * height_];
+  board_  = new board_value[width_ * height_];
 }
 
 Game::~Game() {
@@ -48,7 +48,7 @@ void Game::update() {
   drawBoard();
 }
 
-boardValue Game::getValueAt(Location loc) const {
+board_value Game::getValueAt(Location loc) const {
   if (loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_) {
     std::cerr << "Error: Location out of bounds. " << loc;
     std::cerr << "is not within the " << width_ << "x" << height_ 
@@ -74,7 +74,7 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
   return os;
 }
 
-boardValue& Game::accessBoard(Location loc) {
+board_value& Game::accessBoard(Location loc) {
   if (loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_) {
     std::cerr << "Error: Location out of bounds. " << loc;
     std::cerr << "is not within the " << width_ << "x" << height_ 
@@ -88,7 +88,7 @@ boardValue& Game::accessBoard(Location loc) {
 void Game::clearBoard() {
   for (int x = 0; x < width_; x++) {
     for (int y = 0; y < width_; y++) {
-      accessBoard({x, y}) = boardValue::EMPTY;
+      accessBoard({x, y}) = board_value::EMPTY;
     }
   }
 }
@@ -96,6 +96,6 @@ void Game::clearBoard() {
 void Game::drawBoard() {
   snake_->resetIterator();
   while (snake_->hasNextLoc()) {
-    accessBoard(snake_->nextLoc()) = boardValue::SNAKE;
+    accessBoard(snake_->nextLoc()) = board_value::SNAKE;
   }
 }

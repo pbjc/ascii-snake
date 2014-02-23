@@ -15,6 +15,6 @@ struct Location {
 };
 
 enum class direction { UP, DOWN, LEFT, RIGHT };
-enum class boardValue { EMPTY, SNAKE, FOOD };
+enum class board_value { EMPTY, SNAKE, FOOD };
 
 #endif
