@@ -19,16 +19,16 @@ Game::~Game() {
   delete snake_;
 }
 
-void Game::newGame(Location startLoc) {
+void Game::newGame(Location startLocation) {
   clearBoard();
-  snake_ = new Snake(startLoc);
+  snake_ = new Snake(startLocation);
   drawBoard();
   gameRunning_ = true;
 }
 
-void Game::newGame(Location startLoc, direction dir, int len) {
+void Game::newGame(Location startLocation, direction dir, int len) {
   clearBoard();
-  snake_ = new Snake(startLoc, dir, len);
+  snake_ = new Snake(startLocation, dir, len);
   drawBoard();
   gameRunning_ = true;
 }
@@ -37,8 +37,8 @@ bool Game::isActive() const {
   return gameRunning_;
 }
 
-void Game::setDir(direction dir) {
-  snake_->setDir(dir);
+void Game::setDirection(direction dir) {
+  snake_->setDirection(dir);
 }
 
 void Game::update() {

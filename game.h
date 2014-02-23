@@ -11,11 +11,11 @@ class Game {
     Game(int boardWidth, int boardHeight);
     ~Game();
 
-    void newGame(Location startLoc);
-    void newGame(Location startLoc, direction dir, int len);
+    void newGame(Location startLocation);
+    void newGame(Location startLocation, direction dir, int len);
 
     bool isActive() const;
-    void setDir(direction dir);
+    void setDirection(direction dir);
     void update();
     board_value getValueAt(Location loc) const;
 

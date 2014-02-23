@@ -6,39 +6,39 @@
 Snake::Snake() {
   head_ = new Node{{0, 0}, nullptr};
   length_ = 1;
-  dir_ = direction::RIGHT;
+  direction_ = direction::RIGHT;
   lastTailLoc = {0, 0};
 }
 
-Snake::Snake(Location startLoc) {
-  head_ = new Node{startLoc, nullptr};
+Snake::Snake(Location startLocation) {
+  head_ = new Node{startLocation, nullptr};
   length_ = 1;
-  dir_ = direction::LEFT;
-  lastTailLoc = {startLoc.x, startLoc.y};
+  direction_ = direction::LEFT;
+  lastTailLoc = {startLocation.x, startLocation.y};
 }
 
-Snake::Snake(Location startLoc, direction dir, int len) {
-  if (len < 1) {
+Snake::Snake(Location startLocation, direction dir, int length) {
+  if (length < 1) {
     std::cerr << "Error: Snake length must be greater than zero." << std::endl;
     exit(EXIT_FAILURE);
   }
-  head_ = new Node{startLoc, nullptr};
+  head_ = new Node{startLocation, nullptr};
   Node* curr = head_;
   int buildDirX = dir == direction::LEFT ? 1 :
                   dir == direction::RIGHT ? -1 : 0;
   int buildDirY = dir == direction::DOWN ? -1 :
                   dir == direction::UP ? 1 : 0;
-  for (int i = 1; i < len; i++) {
-    int nextX = startLoc.x + i * buildDirX;
-    int nextY = startLoc.y + i * buildDirY;
+  for (int i = 1; i < length; i++) {
+    int nextX = startLocation.x + i * buildDirX;
+    int nextY = startLocation.y + i * buildDirY;
     curr->next = new Node{{nextX, nextY}, nullptr};
     curr = curr->next;
-    if (i == len - 1) {
+    if (i == length - 1) {
       lastTailLoc = {curr->x + buildDirX, curr->y + buildDirY};
     }
   }
-  length_ = len;
-  dir_ = dir;
+  length_ = length;
+  direction_ = dir;
 }
 
 Snake::~Snake() {
@@ -50,16 +50,16 @@ Snake::~Snake() {
   }
 }
 
-void Snake::setDir(direction dir) {
-  dir_ = dir;
+void Snake::setDirection(direction dir) {
+  direction_ = dir;
 }
 
 void Snake::move() {
   move(head_);
-  head_->x += dir_ == direction::LEFT ? -1 :
-              dir_ == direction::RIGHT ? 1 : 0;
-  head_->y += dir_ == direction::DOWN ? 1 :
-              dir_ == direction::UP ? -1 : 0;
+  head_->x += direction_ == direction::LEFT ? -1 :
+              direction_ == direction::RIGHT ? 1 : 0;
+  head_->y += direction_ == direction::DOWN ? 1 :
+              direction_ == direction::UP ? -1 : 0;
 }
 
 void Snake::move(Node* node) {
@@ -95,7 +95,7 @@ Location Snake::nextLoc() {
 }
 
 std::ostream& operator<<(std::ostream& os, const Snake& snake) {
-  os << int(snake.dir_) << ":";
+  os << int(snake.direction_) << ":";
   Snake::Node* curr = snake.head_;
   while (curr != nullptr) {
     os << *curr;

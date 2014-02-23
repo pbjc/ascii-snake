@@ -7,11 +7,11 @@
 class Snake {
   public:
     Snake();
-    Snake(Location startLoc);
-    Snake(Location startLoc, direction dir, int len);
+    Snake(Location startLocation);
+    Snake(Location startLocation, direction dir, int length);
     ~Snake();
 
-    void setDir(direction dir);
+    void setDirection(direction dir);
     void move();
     void feed();
 
@@ -30,7 +30,7 @@ class Snake {
     Node* iter_;
     Location lastTailLoc;
     int length_;
-    direction dir_;
+    direction direction_;
 
     void move(Node* node);
     Snake(const Snake&);
