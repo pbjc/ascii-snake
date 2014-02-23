@@ -21,15 +21,15 @@ class Game {
 
     friend std::ostream& operator<<(std::ostream& os, const Game& game);
   private:
+    board_value& accessBoard(Location loc);
+    void clearBoard();
+    void drawBoard();
+
     int width_;
     int height_;
     board_value* board_;
     Snake* snake_;
     bool gameRunning_;
-
-    board_value& accessBoard(Location loc);
-    void clearBoard();
-    void drawBoard();
 
     Game(const Game&);
     Game& operator=(const Game&);

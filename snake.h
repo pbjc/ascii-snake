@@ -26,13 +26,14 @@ class Snake {
       Node(Location loc, Node* nextNode) : Location(loc.x, loc.y), next(nextNode) { }
     };
 
+    void move(Node* node);
+
     Node* head_;
     Node* iter_;
     Location lastTailLoc;
     int length_;
     direction direction_;
 
-    void move(Node* node);
     Snake(const Snake&);
     Snake& operator=(const Snake&);
 };
