@@ -26,7 +26,7 @@ class Game {
     board_value& accessBoard(Location loc);
     bool isOutOfBounds(Location loc) const;
     void clearBoard();
-    void updateAndDrawSnake();
+    void drawSnake();
     void undrawSnake();
     void placeNewFood();
 

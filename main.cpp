@@ -1,8 +1,11 @@
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include "common.h"
 #include "game.h"
 
 int main() {
+  srand(time(NULL));
   Game game(10, 10);
   game.newGame({5, 5}, direction::LEFT, 3);
   std::cout << game << std::endl;

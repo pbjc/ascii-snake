@@ -1,6 +1,5 @@
 #include "game.h"
 #include <cstdlib>
-#include <ctime>
 #include <iostream>
 #include "common.h"
 #include "snake.h"
@@ -13,7 +12,6 @@ Game::Game(int boardWidth, int boardHeight) {
   width_ = boardWidth;
   height_ = boardHeight;
   board_  = new board_value[width_ * height_];
-  srand(time(NULL));
 }
 
 Game::~Game() {
@@ -24,7 +22,7 @@ Game::~Game() {
 void Game::newGame(Location startLocation) {
   clearBoard();
   snake_ = new Snake(startLocation);
-  updateAndDrawSnake();
+  drawSnake();
   placeNewFood();
   gameRunning_ = true;
 }
@@ -32,7 +30,7 @@ void Game::newGame(Location startLocation) {
 void Game::newGame(Location startLocation, direction dir, int len) {
   clearBoard();
   snake_ = new Snake(startLocation, dir, len);
-  updateAndDrawSnake();
+  drawSnake();
   placeNewFood();
   gameRunning_ = true;
 }
@@ -50,15 +48,25 @@ void Game::update() {
     return;
   }
   undrawSnake();
-  snake_->move();
-  updateAndDrawSnake();
+  Location newLoc = snake_->getNewHeadLocation();
+  if (getValueAt(newLoc) == board_value::SNAKE || isOutOfBounds(newLoc)) {
+    gameRunning_ = false;
+    return;
+  } else if (getValueAt(newLoc) == board_value::FOOD) {
+    snake_->feed();
+    drawSnake();
+    placeNewFood();
+  } else {
+    snake_->move();
+    drawSnake();
+  }
 }
 
 board_value Game::getValueAt(Location loc) const {
   if (isOutOfBounds(loc)) {
     std::cerr << "Error: Location out of bounds. " << loc;
     std::cerr << "is not within the " << width_ << "x" << height_ 
-                                      << " board dimensions.";
+              << " board dimensions.";
     std::cerr << std::endl;
     exit(EXIT_FAILURE);
   }
@@ -107,34 +115,24 @@ void Game::clearBoard() {
   }
 }
 
-void Game::updateAndDrawSnake() {
-  bool needNewFood = false;
+void Game::drawSnake() {
   snake_->resetIterator();
-  Location headLoc = snake_->nextLoc();
-  if (getValueAt(headLoc) == board_value::SNAKE || isOutOfBounds(headLoc)) {
-    gameRunning_ = false;
-    return;
-  } else if (getValueAt(headLoc) == board_value::FOOD) {
-    snake_->feed();
-    needNewFood = true;
-  }
-  accessBoard(headLoc) = board_value::SNAKE;
-  while (snake_->hasNextLoc()) {
-    accessBoard(snake_->nextLoc()) = board_value::SNAKE;
-  }
-  if (needNewFood) {
-    placeNewFood();
+  while (snake_->hasNextLocation()) {
+    accessBoard(snake_->nextLocation()) = board_value::SNAKE;
   }
 }
 
 void Game::undrawSnake() {
   snake_->resetIterator();
-  while (snake_->hasNextLoc()) {
-    accessBoard(snake_->nextLoc()) = board_value::EMPTY;
+  while (snake_->hasNextLocation()) {
+    accessBoard(snake_->nextLocation()) = board_value::EMPTY;
   }
 }
 
 void Game::placeNewFood() {
+  if (width_ * height_ == snake_->getLength()) {
+    gameRunning_ = false;
+  }
   int randIndex = rand() % (width_ * height_ - snake_->getLength());
   int counter = 0;
   for (int i = 0; i < width_ * height_; i++) {

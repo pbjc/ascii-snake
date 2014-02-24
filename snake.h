@@ -15,25 +15,24 @@ class Snake {
     void move();
     void feed();
     int getLength() const;
+    Location getNewHeadLocation() const;
 
     void resetIterator();
-    bool hasNextLoc();
-    Location nextLoc();
+    bool hasNextLocation();
+    Location nextLocation();
 
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake);
   private:
-    struct Node : public Location {
-      Node* next;
-      Node(Location loc, Node* nextNode) : Location(loc.x, loc.y), next(nextNode) { }
-    };
-
-    void move(Node* node);
-
     Node* head_;
+    Node* tail_;
     Node* iter_;
-    Location lastTailLoc;
     int length_;
     direction direction_;
+
+    struct Node : public Location {
+      Node(Location loc, Node* nextNode) : Location(loc.x, loc.y), next(nextNode) { }
+      Node* next;
+    };
 
     Snake(const Snake&);
     Snake& operator=(const Snake&);

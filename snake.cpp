@@ -5,16 +5,16 @@
 
 Snake::Snake() {
   head_ = new Node{{0, 0}, nullptr};
+  tail_ = head_;
   length_ = 1;
   direction_ = direction::RIGHT;
-  lastTailLoc = {0, 0};
 }
 
 Snake::Snake(Location startLocation) {
   head_ = new Node{startLocation, nullptr};
+  tail_ = head_;
   length_ = 1;
   direction_ = direction::LEFT;
-  lastTailLoc = {startLocation.x, startLocation.y};
 }
 
 Snake::Snake(Location startLocation, direction dir, int length) {
@@ -24,17 +24,17 @@ Snake::Snake(Location startLocation, direction dir, int length) {
   }
   head_ = new Node{startLocation, nullptr};
   Node* curr = head_;
-  int buildDirX = dir == direction::LEFT ? 1 :
-                  dir == direction::RIGHT ? -1 : 0;
-  int buildDirY = dir == direction::DOWN ? -1 :
-                  dir == direction::UP ? 1 : 0;
+  if (length == 1) {
+    tail_ = head_;
+  }
+  direction buildDir = direction((int(dir) + 2) % 4);
+  Location nextLoc = startLocation;
   for (int i = 1; i < length; i++) {
-    int nextX = startLocation.x + i * buildDirX;
-    int nextY = startLocation.y + i * buildDirY;
-    curr->next = new Node{{nextX, nextY}, nullptr};
+    nextLoc = nextLoc.getAdjacentLocation(buildDir);
+    curr->next = new Node{nextLoc, nullptr};
     curr = curr->next;
     if (i == length - 1) {
-      lastTailLoc = {curr->x + buildDirX, curr->y + buildDirY};
+      tail_ = curr;
     }
   }
   length_ = length;
@@ -55,44 +55,42 @@ void Snake::setDirection(direction dir) {
 }
 
 void Snake::move() {
-  move(head_);
-  head_->x += direction_ == direction::LEFT ? -1 :
-              direction_ == direction::RIGHT ? 1 : 0;
-  head_->y += direction_ == direction::DOWN ? 1 :
-              direction_ == direction::UP ? -1 : 0;
-}
-
-void Snake::move(Node* node) {
-  if (node->next == nullptr) {
-    lastTailLoc = {node->x, node->y};
-    return;
+  Node* newTail = head_;
+  if (length_ > 1) {
+    while (newTail->next->next != nullptr) {
+      newTail = newTail->next;
+    }
   }
-  move(node->next);
-  node->next->x = node->x;
-  node->next->y = node->y;
+  Location newLoc = head_->getAdjacentLocation(direction_);
+  tail_->x = newLoc.x;
+  tail_->y = newLoc.y;
+  tail_->next = head_;
+  head_ = tail_;
+  tail_ = newTail;
+  newTail->next = nullptr;
 }
 
 void Snake::feed() {
-  Node* curr = head_;
-  while (curr->next != nullptr) {
-    curr = curr->next;
-  }
-  curr->next = new Node{lastTailLoc, nullptr};
+  head_ = new Node{head_->getAdjacentLocation(direction_), head_};
 }
 
 int Snake::getLength() const {
   return length_;
 }
 
+Location Snake::getNewHeadLocation() const {
+  return head_->getAdjacentLocation(direction_);
+}
+
 void Snake::resetIterator() {
   iter_ = head_;
 }
 
-bool Snake::hasNextLoc() {
+bool Snake::hasNextLocation() {
   return iter_ != nullptr;
 }
 
-Location Snake::nextLoc() {
+Location Snake::nextLocation() {
   Location loc = {iter_->x, iter_->y};
   iter_ = iter_->next;
   return loc;
