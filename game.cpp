@@ -24,16 +24,16 @@ Game::~Game() {
 void Game::newGame(Location startLocation) {
   clearBoard();
   snake_ = new Snake(startLocation);
-  placeNewFood();
   updateAndDrawSnake();
+  placeNewFood();
   gameRunning_ = true;
 }
 
 void Game::newGame(Location startLocation, direction dir, int len) {
   clearBoard();
   snake_ = new Snake(startLocation, dir, len);
-  placeNewFood();
   updateAndDrawSnake();
+  placeNewFood();
   gameRunning_ = true;
 }
 
@@ -108,6 +108,7 @@ void Game::clearBoard() {
 }
 
 void Game::updateAndDrawSnake() {
+  bool needNewFood = false;
   snake_->resetIterator();
   Location headLoc = snake_->nextLoc();
   if (getValueAt(headLoc) == board_value::SNAKE || isOutOfBounds(headLoc)) {
@@ -115,11 +116,14 @@ void Game::updateAndDrawSnake() {
     return;
   } else if (getValueAt(headLoc) == board_value::FOOD) {
     snake_->feed();
-    placeNewFood();
+    needNewFood = true;
   }
   accessBoard(headLoc) = board_value::SNAKE;
   while (snake_->hasNextLoc()) {
     accessBoard(snake_->nextLoc()) = board_value::SNAKE;
+  }
+  if (needNewFood) {
+    placeNewFood();
   }
 }
 
@@ -137,10 +141,8 @@ void Game::placeNewFood() {
     if (counter == randIndex) {
       board_[i] = board_value::FOOD;
       break;
-    } else {
-      if (board_[i] == board_value::EMPTY) {
-        counter++;
-      }
+    } else if (board_[i] == board_value::EMPTY) {
+      counter++;
     }
   }
 }
