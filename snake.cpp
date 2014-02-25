@@ -72,6 +72,7 @@ void Snake::move() {
 
 void Snake::feed() {
   head_ = new Node{head_->getAdjacentLocation(direction_), head_};
+  length_++;
 }
 
 int Snake::getLength() const {

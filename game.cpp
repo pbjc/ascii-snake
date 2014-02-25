@@ -94,7 +94,7 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
 }
 
 bool Game::isOutOfBounds(Location loc) const {
-  return loc.x < 0 || loc.x > width_ || loc.y < 0 || loc.y > height_;
+  return loc.x < 0 || loc.x >= width_ || loc.y < 0 || loc.y >= height_;
 }
 
 board_value& Game::accessBoard(Location loc) {
@@ -135,13 +135,14 @@ void Game::placeNewFood() {
     gameRunning_ = false;
   }
   int randIndex = rand() % (width_ * height_ - snake_->getLength());
-  int counter = 0;
-  for (int i = 0; i < width_ * height_; i++) {
-    if (counter == randIndex) {
-      board_[i] = board_value::FOOD;
-      break;
-    } else if (board_[i] == board_value::EMPTY) {
-      counter++;
+  for (int x = 0; x < width_; x++) {
+    for (int y = 0; y < height_; y++) {
+      if (randIndex == 0 && getValueAt({x, y}) == board_value::EMPTY) {
+        accessBoard({x, y}) = board_value::FOOD;
+        return;
+      } else if (getValueAt({x, y}) == board_value::EMPTY) {
+        randIndex--;
+      }
     }
   }
 }
