@@ -27,6 +27,7 @@ int main() {
   Game temp(width, height);
   game = &temp;
   game->newGame({width / 3, height / 3}, direction::RIGHT, 3);
+  wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
   drawGame();
   refresh();
 
@@ -55,14 +56,14 @@ int main() {
 }
 
 static void drawGame() {
-  erase();
-  wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       if (game->getValueAt({x, y}) == board_value::SNAKE) {
         mvaddch(y + 1, x + 1, ' ' | A_STANDOUT);
       } else if (game->getValueAt({x, y}) == board_value::FOOD) {
         mvaddch(y + 1, x + 1, '*');
+      } else {
+        mvaddch(y + 1, x + 1, ' ');
       }
     }
   }
