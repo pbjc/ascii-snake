@@ -23,16 +23,16 @@ class Snake {
 
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake);
   private:
+    struct Node : public Location {
+      Node(Location loc, Node* nextNode) : Location(loc.x, loc.y), next(nextNode) { }
+      Node* next;
+    };
+
     Node* head_;
     Node* tail_;
     Node* iter_;
     int length_;
     direction direction_;
-
-    struct Node : public Location {
-      Node(Location loc, Node* nextNode) : Location(loc.x, loc.y), next(nextNode) { }
-      Node* next;
-    };
 
     Snake(const Snake&);
     Snake& operator=(const Snake&);

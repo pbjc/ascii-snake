@@ -10,11 +10,10 @@ struct Location {
   Location() { x = 0; y = 0; }
   Location(int xVal, int yVal) : x(xVal), y(yVal) { }
   Location getAdjacentLocation(direction dir) const {
-    int newX = x + (dir == direction::LEFT ? -1 :
-                        dir == direction::RIGHT ? 1 : 0);
-    int newY = y + (dir == direction::UP ? -1 :
-                        dir == direction::DOWN ? 1 : 0);
-    return {newX, newY};
+    if (dir == direction::UP) return {x, y - 1};
+    else if (dir == direction::RIGHT) return {x + 1, y};
+    else if (dir == direction::DOWN) return {x, y + 1};
+    else if (dir == direction::LEFT) return {x + 1, y};
   }
   friend std::ostream& operator<<(std::ostream& os, const Location loc) {
     os << "[" << loc.x << ", " << loc.y << "]";
