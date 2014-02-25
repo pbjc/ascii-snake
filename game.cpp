@@ -47,16 +47,17 @@ void Game::update() {
   if (!gameRunning_) {
     return;
   }
-  undrawSnake();
   Location newLoc = snake_->getNewHeadLocation();
-  if (getValueAt(newLoc) == board_value::SNAKE || isOutOfBounds(newLoc)) {
+  if (isOutOfBounds(newLoc) || getValueAt(newLoc) == board_value::SNAKE) {
     gameRunning_ = false;
     return;
   } else if (getValueAt(newLoc) == board_value::FOOD) {
+    undrawSnake();
     snake_->feed();
     drawSnake();
     placeNewFood();
   } else {
+    undrawSnake();
     snake_->move();
     drawSnake();
   }
