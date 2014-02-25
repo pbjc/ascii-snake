@@ -6,7 +6,7 @@
 
 Game::Game(int boardWidth, int boardHeight) {
   if (boardWidth < 3 || boardHeight < 3) {
-    std::cerr << "Error: Board dimensions must be larger than 3x3." << std::endl;
+    std::cerr << "Error: Board dimensions must be at least 3x3." << std::endl;
     exit(EXIT_FAILURE);
   }
   width_ = boardWidth;
@@ -101,7 +101,7 @@ board_value& Game::accessBoard(Location loc) {
   if (isOutOfBounds(loc)) {
     std::cerr << "Error: Location out of bounds. " << loc;
     std::cerr << "is not within the " << width_ << "x" << height_ 
-                                      << " board dimensions.";
+              << " board dimensions.";
     std::cerr << std::endl;
     exit(EXIT_FAILURE);
   }
@@ -137,11 +137,13 @@ void Game::placeNewFood() {
   int randIndex = rand() % (width_ * height_ - snake_->getLength());
   for (int x = 0; x < width_; x++) {
     for (int y = 0; y < height_; y++) {
-      if (randIndex == 0 && getValueAt({x, y}) == board_value::EMPTY) {
-        accessBoard({x, y}) = board_value::FOOD;
-        return;
-      } else if (getValueAt({x, y}) == board_value::EMPTY) {
-        randIndex--;
+      if (getValueAt({x, y}) == board_value::EMPTY) {
+        if (randIndex == 0) {
+          accessBoard({x, y}) = board_value::FOOD;
+          return;
+        } else {
+          randIndex--;
+        }
       }
     }
   }
