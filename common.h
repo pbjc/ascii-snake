@@ -13,7 +13,7 @@ struct Location {
     if (dir == direction::UP) return {x, y - 1};
     else if (dir == direction::RIGHT) return {x + 1, y};
     else if (dir == direction::DOWN) return {x, y + 1};
-    else if (dir == direction::LEFT) return {x + 1, y};
+    else if (dir == direction::LEFT) return {x - 1, y};
   }
   friend std::ostream& operator<<(std::ostream& os, const Location loc) {
     os << "[" << loc.x << ", " << loc.y << "]";
