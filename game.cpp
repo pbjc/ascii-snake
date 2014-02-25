@@ -109,7 +109,7 @@ board_value& Game::accessBoard(Location loc) {
 
 void Game::clearBoard() {
   for (int x = 0; x < width_; x++) {
-    for (int y = 0; y < width_; y++) {
+    for (int y = 0; y < height_; y++) {
       accessBoard({x, y}) = board_value::EMPTY;
     }
   }
