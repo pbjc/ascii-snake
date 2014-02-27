@@ -1,3 +1,4 @@
+#include <cstring>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -44,7 +45,17 @@ int main() {
     }
     game->update();
     if (!game->isActive()) {
-      break;
+      const char* gameOver = "You died. Press q to quit, or any other key to play again.";
+      mvprintw(height / 2, width / 2 - strlen(gameOver) / 2, gameOver);
+      refresh();
+      nodelay(stdscr, FALSE);
+      ch = getch();
+      if (ch == 'q') {
+        break;
+      } else {
+        game->newGame({width / 3, height / 3}, direction::RIGHT, 3);
+        nodelay(stdscr, TRUE);
+      }
     }
     drawGame();
     refresh();
