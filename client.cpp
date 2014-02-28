@@ -10,47 +10,32 @@ static Game* game;
 static int width;
 static int height;
 
+static void init();
+static void setGameInput();
 static void drawGame();
+static void showGameOver();
 static void wait(float seconds);
 
 int main() {
-  initscr();
-  cbreak();
-  keypad(stdscr, TRUE);
-  nodelay(stdscr, TRUE);
-  noecho();
-  curs_set(0);
-  srand(time(NULL));
+  init();
 
   getmaxyx(stdscr, height, width);
   height -= 2;
   width -= 2;
-  Game temp(width, height);
-  game = &temp;
+  game = new Game(width, height);
   game->newGame({width / 3, height / 3}, direction::RIGHT, 3);
+
   wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
   drawGame();
   refresh();
 
   while (true) {
-    int ch = getch();
-    if (ch == KEY_UP) {
-      game->setDirection(direction::UP);
-    } else if (ch == KEY_RIGHT) {
-      game->setDirection(direction::RIGHT);
-    } else if (ch == KEY_DOWN) {
-      game->setDirection(direction::DOWN);
-    } else if (ch == KEY_LEFT) {
-      game->setDirection(direction::LEFT);
-    }
+    setGameInput();
     game->update();
     if (!game->isActive()) {
-      const char* gameOver = "You died. Press q to quit, or any other key to play again.";
-      mvprintw(height / 2, width / 2 - strlen(gameOver) / 2, gameOver);
-      refresh();
+      showGameOver();
       nodelay(stdscr, FALSE);
-      ch = getch();
-      if (ch == 'q') {
+      if (getch() == 'q') {
         break;
       } else {
         game->newGame({width / 3, height / 3}, direction::RIGHT, 3);
@@ -66,6 +51,29 @@ int main() {
   return 0;
 }
 
+static void init() {
+  initscr();
+  cbreak();
+  keypad(stdscr, TRUE);
+  nodelay(stdscr, TRUE);
+  noecho();
+  curs_set(0);
+  srand(time(NULL));
+}
+
+static void setGameInput() {
+  int ch = getch();
+  if (ch == KEY_UP) {
+    game->setDirection(direction::UP);
+  } else if (ch == KEY_RIGHT) {
+    game->setDirection(direction::RIGHT);
+  } else if (ch == KEY_DOWN) {
+    game->setDirection(direction::DOWN);
+  } else if (ch == KEY_LEFT) {
+    game->setDirection(direction::LEFT);
+  }
+}
+
 static void drawGame() {
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
@@ -78,6 +86,12 @@ static void drawGame() {
       }
     }
   }
+}
+
+static void showGameOver() {
+  const char* gameOver = "You died. Press q to quit, or any other key to play again.";
+  mvprintw(height / 2, width / 2 - strlen(gameOver) / 2, gameOver);
+  refresh();
 }
 
 static void wait(float seconds) {
