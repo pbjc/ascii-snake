@@ -9,6 +9,7 @@
 static Game* game;
 static int width;
 static int height;
+static constexpr int STARTLENGTH = 3;
 
 static void init();
 static void setGameInput();
@@ -23,7 +24,7 @@ int main() {
   height -= 2;
   width -= 2;
   game = new Game(width, height);
-  game->newGame({width / 3, height / 3}, direction::RIGHT, 3);
+  game->newGame({width / 3, height / 3}, direction::RIGHT, STARTLENGTH);
 
   wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
   drawGame();
@@ -38,13 +39,13 @@ int main() {
       if (getch() == 'q') {
         break;
       } else {
-        game->newGame({width / 3, height / 3}, direction::RIGHT, 3);
+        game->newGame({width / 3, height / 3}, direction::RIGHT, STARTLENGTH);
         nodelay(stdscr, TRUE);
       }
     }
     drawGame();
     refresh();
-    wait(.1f);
+    wait(0.1f);
   }
 
   endwin();
@@ -89,7 +90,12 @@ static void drawGame() {
 }
 
 static void showGameOver() {
-  const char* gameOver = "You died. Press q to quit, or any other key to play again.";
+  const char* gameOver;
+  if (game->getSnakeLength() == width * height) {
+    gameOver = "You died. Press q to quit, or any other key to play again.";
+  } else {
+    gameOver = "You won! Press q to quit, or any other key to play again.";
+  }
   mvprintw(height / 2, width / 2 - strlen(gameOver) / 2, gameOver);
   refresh();
 }
