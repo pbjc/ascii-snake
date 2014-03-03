@@ -47,7 +47,8 @@ void Game::update() {
   if (!gameRunning_) {
     return;
   }
-  Location newLoc = snake_->getNewHeadLocation();
+  Location newLoc = snake_->getHeadLocation().getAdjacentLocation(
+                    snake_->getDirection());
   if (isOutOfBounds(newLoc) || getValueAt(newLoc) == board_value::SNAKE) {
     gameRunning_ = false;
     return;

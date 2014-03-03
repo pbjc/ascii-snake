@@ -75,12 +75,16 @@ void Snake::feed() {
   length_++;
 }
 
-int Snake::getLength() const {
-  return length_;
+Location Snake::getHeadLocation() const {
+  return *head_;
 }
 
-Location Snake::getNewHeadLocation() const {
-  return head_->getAdjacentLocation(direction_);
+direction Snake::getDirection() const {
+  return direction_;
+}
+
+int Snake::getLength() const {
+  return length_;
 }
 
 void Snake::resetIterator() {
