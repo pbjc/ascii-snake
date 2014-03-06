@@ -36,6 +36,7 @@ int main() {
     if (!game->isActive()) {
       showGameOver();
       nodelay(stdscr, FALSE);
+      wait(.1f);
       if (getch() == 'q') {
         break;
       } else {
@@ -79,7 +80,7 @@ static void drawGame() {
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       if (game->getValueAt({x, y}) == board_value::SNAKE) {
-        mvaddch(y + 1, x + 1, ' ' | A_STANDOUT);
+        mvaddch(y + 1, x + 1, 'o');
       } else if (game->getValueAt({x, y}) == board_value::FOOD) {
         mvaddch(y + 1, x + 1, '*');
       } else {
@@ -92,9 +93,9 @@ static void drawGame() {
 static void showGameOver() {
   const char* gameOver;
   if (game->getSnakeLength() == width * height) {
-    gameOver = "You died. Press q to quit, or any other key to play again.";
-  } else {
     gameOver = "You won! Press q to quit, or any other key to play again.";
+  } else {
+    gameOver = "You died. Press q to quit, or any other key to play again.";
   }
   mvprintw(height / 2, width / 2 - strlen(gameOver) / 2, gameOver);
   refresh();
