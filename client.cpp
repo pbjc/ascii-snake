@@ -20,23 +20,14 @@ static void wait(float seconds);
 int main() {
   init();
 
-  getmaxyx(stdscr, height, width);
-  height -= 2;
-  width -= 2;
-  game = new Game(width, height);
-  game->newGame({width / 3, height / 3}, direction::RIGHT, STARTLENGTH);
-
-  wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
-  drawGame();
-  refresh();
-
   while (true) {
     setGameInput();
     game->update();
     if (!game->isActive()) {
       showGameOver();
-      nodelay(stdscr, FALSE);
       wait(.1f);
+      getch();
+      nodelay(stdscr, FALSE);
       if (getch() == 'q') {
         break;
       } else {
@@ -61,6 +52,16 @@ static void init() {
   noecho();
   curs_set(0);
   srand(time(NULL));
+
+  getmaxyx(stdscr, height, width);
+  height -= 2;
+  width -= 2;
+  game = new Game(width, height);
+  game->newGame({width / 3, height / 3}, direction::RIGHT, STARTLENGTH);
+
+  wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
+  drawGame();
+  refresh();
 }
 
 static void setGameInput() {
@@ -79,9 +80,10 @@ static void setGameInput() {
 static void drawGame() {
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
-      if (game->getValueAt({x, y}) == board_value::SNAKE) {
+      Location loc = {x, y};
+      if (game->getValueAt(loc) == board_value::SNAKE) {
         mvaddch(y + 1, x + 1, 'o');
-      } else if (game->getValueAt({x, y}) == board_value::FOOD) {
+      } else if (game->getValueAt(loc) == board_value::FOOD) {
         mvaddch(y + 1, x + 1, '*');
       } else {
         mvaddch(y + 1, x + 1, ' ');
