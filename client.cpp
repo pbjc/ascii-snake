@@ -7,12 +7,15 @@
 #include "game.h"
 
 static Game* game;
-static int width;
-static int height;
+static int screenWidth;
+static int screenHeight;
+static int gameWidth;
+static int gameHeight;
 static constexpr int STARTLENGTH = 3;
 
 static void init();
 static void setGameInput();
+static void drawBorder();
 static void drawGame();
 static void showGameOver();
 static void wait(float seconds);
@@ -31,7 +34,7 @@ int main() {
       if (getch() == 'q') {
         break;
       } else {
-        game->newGame({width / 3, height / 3}, direction::RIGHT, STARTLENGTH);
+        game->newGame({gameWidth / 3, gameHeight / 3}, direction::RIGHT, STARTLENGTH);
         nodelay(stdscr, TRUE);
       }
     }
@@ -53,13 +56,13 @@ static void init() {
   curs_set(0);
   srand(time(NULL));
 
-  getmaxyx(stdscr, height, width);
-  height -= 2;
-  width -= 2;
-  game = new Game(width, height);
-  game->newGame({width / 3, height / 3}, direction::RIGHT, STARTLENGTH);
+  getmaxyx(stdscr, screenHeight, screenWidth);
+  gameHeight = screenHeight - 2;
+  gameWidth = (screenWidth - 2 - (screenWidth % 2 == 0 ? 0 : 1)) / 2;
+  game = new Game(gameWidth, gameHeight);
+  game->newGame({gameWidth / 3, gameHeight / 3}, direction::RIGHT, STARTLENGTH);
 
-  wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
+  drawBorder();
   drawGame();
   refresh();
 }
@@ -77,16 +80,34 @@ static void setGameInput() {
   }
 }
 
+static void drawBorder() {
+  int xOffset = screenWidth % 2 == 0 ? 0 : 1;
+  mvaddch(0, 0, '+');
+  mvaddch(0, screenWidth - 1 - xOffset, '+');
+  mvaddch(screenHeight - 1, 0, '+');
+  mvaddch(screenHeight - 1, screenWidth - 1 - xOffset, '+');
+  for (int x = 1; x < screenWidth - 1 - xOffset; x++) {
+    mvaddch(0, x, '-');
+    mvaddch(screenHeight - 1, x, '-');
+  }
+  for (int y = 1; y < screenHeight - 1; y++) {
+    mvaddch(y, 0, '|');
+    mvaddch(y, screenWidth - 1 - xOffset, '|');
+  }
+}
+
 static void drawGame() {
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
+  for (int x = 0; x < gameWidth; x++) {
+    for (int y = 0; y < gameHeight; y++) {
       Location loc = {x, y};
       if (game->getValueAt(loc) == board_value::SNAKE) {
-        mvaddch(y + 1, x + 1, 'o');
+        attron(A_STANDOUT);
+        mvprintw(y + 1, x * 2 + 1, "  ");
+        attroff(A_STANDOUT);
       } else if (game->getValueAt(loc) == board_value::FOOD) {
-        mvaddch(y + 1, x + 1, '*');
+        mvprintw(y + 1, x * 2 + 1, "><");
       } else {
-        mvaddch(y + 1, x + 1, ' ');
+        mvprintw(y + 1, x * 2 + 1, "  ");
       }
     }
   }
@@ -94,12 +115,12 @@ static void drawGame() {
 
 static void showGameOver() {
   const char* gameOver;
-  if (game->getSnakeLength() == width * height) {
+  if (game->getSnakeLength() == gameWidth * gameHeight) {
     gameOver = "You won! Press q to quit, or any other key to play again.";
   } else {
     gameOver = "You died. Press q to quit, or any other key to play again.";
   }
-  mvprintw(height / 2, width / 2 - strlen(gameOver) / 2, gameOver);
+  mvprintw(screenHeight / 2, screenWidth / 2 - strlen(gameOver) / 2, gameOver);
   refresh();
 }
 
