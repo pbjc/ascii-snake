@@ -31,7 +31,8 @@ int main() {
       wait(.1f);
       getch();
       nodelay(stdscr, FALSE);
-      if (getch() == 'q') {
+      int ch = getch();
+      if (ch == 'q' || ch == 'Q') {
         break;
       } else {
         game->newGame({gameWidth / 3, gameHeight / 3}, direction::RIGHT, STARTLENGTH);
