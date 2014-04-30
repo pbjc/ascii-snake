@@ -21,6 +21,7 @@ Game::~Game() {
 
 void Game::newGame(Location startLocation) {
   clearBoard();
+  delete snake_;
   snake_ = new Snake(startLocation);
   drawSnake();
   placeNewFood();
@@ -29,6 +30,7 @@ void Game::newGame(Location startLocation) {
 
 void Game::newGame(Location startLocation, direction dir, int len) {
   clearBoard();
+  delete snake_;
   snake_ = new Snake(startLocation, dir, len);
   drawSnake();
   placeNewFood();
